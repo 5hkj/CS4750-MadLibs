@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MadLibs</string>
+    <string name="next_madlib">Next MadLib</string>
+    <string name="show_madlib">Visualize MadLib</string>
 </resources>
