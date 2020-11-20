@@ -1,7 +1,6 @@
 package com.cs4750.madlibs
 
-import android.content.Context
-import android.graphics.Typeface
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
