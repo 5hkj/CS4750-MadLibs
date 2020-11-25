@@ -15,24 +15,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Repository.initialize(this)
 
         var index : Int = 0 // Represents the current mad lib that is being displayed to User
         var inputFields : MutableList<EditText> // dynamically created input fields
 
-        initTitle(RepositoryManager.getInstance().get(index))
-        inputFields = initScrollView(RepositoryManager.getInstance().get(index))
-
+        initTitle(MadLibRepositoryManager.getInstance().get(index))
+        inputFields = initScrollView(MadLibRepositoryManager.getInstance().get(index))
 
 
         next_madlib.setOnClickListener{ // Sends to next mad lib from repository
-            if(index < RepositoryManager.getInstance().size-1) { // loops entirely
+            if(index < MadLibRepositoryManager.getInstance().size-1) { // loops entirely
                 index++
             }else{
                 index = 0
             }
 
-            initTitle(RepositoryManager.getInstance().get(index))
-            inputFields = initScrollView(RepositoryManager.getInstance().get(index))
+            initTitle(MadLibRepositoryManager.getInstance().get(index))
+            inputFields = initScrollView(MadLibRepositoryManager.getInstance().get(index))
         }
 
 
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
 
             // Set text:
-            textView.text = RepositoryManager.getInstance().get(index).formatString(textEditListToStringList(inputFields))
+            textView.text = MadLibRepositoryManager.getInstance().get(index).formatString(textEditListToStringList(inputFields))
 
             line_view.addView(textView)
         }

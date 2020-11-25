@@ -1,13 +1,17 @@
 package com.cs4750.madlibs
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 /**
  * MadLib Class:
  *  Represents a mad lib unfilled out.
  */
-class MadLib constructor(
-    val title: String, // Name of mad lib
-    val inputs: List<String>, // The needed input fields to complete mad lib
-    val lib: String){ // The unformated mad lib
+@Entity(tableName = "Libs")
+class MadLib (@PrimaryKey
+    val title: String = "", // Name of mad lib
+    val inputs: List<String> = listOf(" "), // The needed input fields to complete mad lib
+    val lib: String = ""){ // The unformated mad lib
 
     fun getInputSize():Int{
         return inputs.size
