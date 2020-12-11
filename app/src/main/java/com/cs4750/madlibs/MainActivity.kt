@@ -1,7 +1,5 @@
 package com.cs4750.madlibs
 
-import android.content.Context
-import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
@@ -9,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -20,38 +19,39 @@ class MainActivity : AppCompatActivity() {
         var index : Int = 0 // Represents the current mad lib that is being displayed to User
         var inputFields : MutableList<EditText> // dynamically created input fields
 
-        initTitle(RepositoryManager.getInstance().get(index))
-        inputFields = initScrollView(RepositoryManager.getInstance().get(index))
+        initTitle(RepositoryManager.getInstance(this).get(index))
+        inputFields = initScrollView(RepositoryManager.getInstance(this).get(index))
 
 
 
         next_madlib.setOnClickListener{ // Sends to next mad lib from repository
-            if(index < RepositoryManager.getInstance().size-1) { // loops entirely
+            if(index < RepositoryManager.getInstance(this).size-1) { // loops entirely
                 index++
             }else{
                 index = 0
             }
 
-            initTitle(RepositoryManager.getInstance().get(index))
-            inputFields = initScrollView(RepositoryManager.getInstance().get(index))
+            initTitle(RepositoryManager.getInstance(this).get(index))
+            inputFields = initScrollView(RepositoryManager.getInstance(this).get(index))
         }
 
 
         show_madlib.setOnClickListener { // Demonstrates the filled out mad lib
 
-            // TODO: Error Checking Toast Messages-When text fields are empty or invalid
+            if(!inputFields.isEmpty() && !emptyFields(inputFields)) {
+                line_view.removeAllViews()
 
-            line_view.removeAllViews()
+                var textView: TextView = TextView(this)
 
-            var textView: TextView = TextView(this)
+                textView.setTypeface(ResourcesCompat.getFont(this, R.font.bubblegum_sans))
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
 
-            textView.setTypeface(ResourcesCompat.getFont(this, R.font.bubblegum_sans))
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+                // Set text:
+                textView.text = RepositoryManager.getInstance(this).get(index)
+                    .formatString(textEditListToStringList(inputFields))
 
-            // Set text:
-            textView.text = RepositoryManager.getInstance().get(index).formatString(textEditListToStringList(inputFields))
-
-            line_view.addView(textView)
+                line_view.addView(textView)
+            }
         }
 
     }
@@ -99,5 +99,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         return stringList.toList()
+    }
+
+    // Checks if the fields have entered values
+    fun emptyFields(inputFields : MutableList<EditText>) : Boolean {
+        for (x in 0..(inputFields.size-1)){
+            if(inputFields[x].text.length <= 1){
+                Toast.makeText(this,"Must be valid input: 2 characters or more", Toast.LENGTH_LONG).show()
+                return true
+            }
+        }
+        return false
     }
 }
